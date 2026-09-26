@@ -15,6 +15,7 @@ exports.handler = async (event) => {
       body: JSON.stringify({
         amount: String(parseFloat(body.amount).toFixed(2)),
         payment_currency: 'RUB',
+        payment_method: 'sbp',
         order_id: 'astro_' + Date.now(),
         description: 'Оплата услуги Астронавигатор',
         success_url: 'https://tubular-bunny-38b360.netlify.app/?payment=success',
