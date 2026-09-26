@@ -17,9 +17,8 @@ exports.handler = async (event) => {
         payment_currency: 'RUB',
         payment_method: 'sbp',
         order_id: 'astro_' + Date.now(),
-        description: 'Оплата услуги Астронавигатор',
-        success_url: 'https://tubular-bunny-38b360.netlify.app/?payment=success',
-        fail_url: 'https://tubular-bunny-38b360.netlify.app/?payment=fail',
+        success_url: 'https://astro-pay.netlify.app/?payment=success',
+        fail_url: 'https://astro-pay.netlify.app/?payment=fail',
       }),
     });
 
