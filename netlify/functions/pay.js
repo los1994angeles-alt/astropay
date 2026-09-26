@@ -13,10 +13,12 @@ exports.handler = async (event) => {
         'X-API-Key': '7oK7Np3OzSLwR6OAimDaf84Coe6P6afOA61IDi6JHTE',
       },
       body: JSON.stringify({
-        amount: parseFloat(body.amount),
+        amount: String(parseFloat(body.amount).toFixed(2)),
         payment_currency: 'RUB',
         order_id: 'astro_' + Date.now(),
         description: 'Оплата услуги Астронавигатор',
+        success_url: 'https://tubular-bunny-38b360.netlify.app/?payment=success',
+        fail_url: 'https://tubular-bunny-38b360.netlify.app/?payment=fail',
       }),
     });
 
