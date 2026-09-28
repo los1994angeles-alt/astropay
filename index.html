@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Astro-Pay</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700;800&family=Manrope:wght@400;500;600;700&display=swap">
 <style>
 :root {
@@ -75,6 +77,13 @@ body::before {
   font-weight: 700;
   letter-spacing: -0.01em;
 }
+.brand-sub {
+  font-size: 10px;
+  color: var(--ink-dim);
+  font-weight: 600;
+  margin-top: 2px;
+  letter-spacing: 0.03em;
+}
 .field-label {
   font-size: 11px;
   text-transform: uppercase;
@@ -96,11 +105,13 @@ body::before {
   font-family: 'Unbounded', sans-serif;
   font-size: 26px;
   font-weight: 700;
+  line-height: 1.2;
   color: var(--ink);
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
   font-variant-numeric: tabular-nums;
   -moz-appearance: textfield;
+  -webkit-font-smoothing: antialiased;
 }
 .amount-input::-webkit-outer-spin-button,
 .amount-input::-webkit-inner-spin-button { -webkit-appearance: none; }
@@ -155,23 +166,14 @@ body::before {
   transition: opacity 0.2s;
 }
 .total-box.visible { opacity: 1; }
-.total-label {
-  font-size: 12px;
-  color: var(--ink-dim);
-  font-weight: 600;
-}
+.total-label { font-size: 12px; color: var(--ink-dim); font-weight: 600; }
 .total-amount {
   font-family: 'Unbounded', sans-serif;
   font-size: 15px;
   font-weight: 700;
   color: var(--green);
 }
-.total-fee {
-  font-size: 11px;
-  color: var(--ink-dim);
-  margin-top: 2px;
-  text-align: right;
-}
+.total-fee { font-size: 11px; color: var(--ink-dim); margin-top: 2px; text-align: right; }
 .pay-btn {
   width: 100%;
   padding: 16px;
@@ -212,6 +214,20 @@ body::before {
   margin-right: 8px;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
+.sber-warning {
+  background: rgba(255,180,0,0.08);
+  border: 1px solid rgba(255,180,0,0.25);
+  border-radius: 11px;
+  padding: 10px 14px;
+  font-size: 12px;
+  color: #f0c040;
+  margin-bottom: 16px;
+  line-height: 1.5;
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+.sber-warning-icon { flex-shrink: 0; margin-top: 1px; }
 .instruction {
   border-top: 1px solid var(--border);
   padding-top: 18px;
@@ -225,36 +241,24 @@ body::before {
   font-weight: 700;
   margin-bottom: 12px;
 }
-.steps {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.step {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-}
+.steps { display: flex; flex-direction: column; gap: 10px; }
+.step { display: flex; align-items: flex-start; gap: 12px; }
 .step-num {
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: rgba(124,77,255,0.2);
-  border: 1px solid rgba(124,77,255,0.4);
+  background: rgba(46,204,113,0.15);
+  border: 1px solid rgba(46,204,113,0.4);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 11px;
   font-weight: 700;
-  color: var(--accent);
+  color: var(--green);
   flex-shrink: 0;
   margin-top: 1px;
 }
-.step-text {
-  font-size: 13px;
-  color: var(--ink-dim);
-  line-height: 1.45;
-}
+.step-text { font-size: 13px; color: var(--ink-dim); line-height: 1.45; }
 .step-text b { color: var(--ink); font-weight: 600; }
 .methods {
   display: flex;
@@ -302,7 +306,10 @@ body::before {
 <div class="card">
   <div class="brand">
     <div class="brand-logo">🌙</div>
-    <div><div class="brand-name">Astro-Pay</div></div>
+    <div>
+      <div class="brand-name">Astro-Pay</div>
+      <div class="brand-sub">Защищённый платёжный шлюз</div>
+    </div>
   </div>
   <div class="field-label">Введи сумму</div>
   <div class="input-wrap">
@@ -324,6 +331,10 @@ body::before {
   </div>
   <div class="error-msg" id="error-msg"></div>
   <button class="pay-btn" id="pay-btn" disabled onclick="handlePay()">Перейти к оплате →</button>
+  <div class="sber-warning">
+    <span class="sber-warning-icon">🔶</span>
+    <span>Внимание: оплата через Сбербанк может занять до 24 часов. Для быстрого зачисления выберите Т-Банк, Альфа, ВТБ или другой банк.</span>
+  </div>
   <div class="instruction">
     <div class="instruction-title">Как проходит оплата</div>
     <div class="steps">
@@ -333,7 +344,7 @@ body::before {
       </div>
       <div class="step">
         <div class="step-num">2</div>
-        <div class="step-text">Выберите <b>свой банк</b> из списка (Сбер, Тинькофф, ВТБ и др.) или отсканируйте <b>QR-код</b></div>
+        <div class="step-text">Выберите <b>свой банк</b> из списка (Т-Банк, Альфа, ВТБ и др.) или отсканируйте <b>QR-код</b></div>
       </div>
       <div class="step">
         <div class="step-num">3</div>
@@ -385,9 +396,7 @@ function calcTotal(base) {
   }
 }
 
-function fmt(n) {
-  return n.toLocaleString('ru-RU') + ' ₽';
-}
+function fmt(n) { return n.toLocaleString('ru-RU') + ' ₽'; }
 
 function updateBtn() {
   const v = getAmount();
