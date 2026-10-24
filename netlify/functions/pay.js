@@ -6,7 +6,7 @@ exports.handler = async (event) => {
     const body = JSON.parse(event.body);
     const baseAmount = parseFloat(body.amount);
     // Комиссия для покупателя: до 10 000 ₽ +8%, от 10 000 ₽ +5%
-    const feePercent = baseAmount >= 10000 ? 1.05 : 1.08;
+    const feePercent = baseAmount >= 10000 ? 1.05 : 1.09;
     const chargedAmount = parseFloat((baseAmount * feePercent).toFixed(2));
     const response = await fetch('https://api.rollypay.io/api/v1/payments', {
       method: 'POST',
