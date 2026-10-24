@@ -2,14 +2,12 @@ exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method Not Allowed' };
   }
-
   try {
     const body = JSON.parse(event.body);
     const baseAmount = parseFloat(body.amount);
-
-    const feePercent = baseAmount >= 10000 ? 1.05 : 1.09;
+    // Комиссия для покупателя: до 10 000 ₽ +8%, от 10 000 ₽ +5%
+    const feePercent = baseAmount >= 10000 ? 1.05 : 1.08;
     const chargedAmount = parseFloat((baseAmount * feePercent).toFixed(2));
-
     const response = await fetch('https://api.rollypay.io/api/v1/payments', {
       method: 'POST',
       headers: {
@@ -26,9 +24,7 @@ exports.handler = async (event) => {
         fail_url: 'https://astro-pay.netlify.app/?payment=fail',
       }),
     });
-
     const data = await response.json();
-
     return {
       statusCode: response.status,
       headers: { 'Content-Type': 'application/json' },
